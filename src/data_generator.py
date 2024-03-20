@@ -3,7 +3,8 @@ import os
 from entities import (
     Nationality, 
     Language,
-    Author    
+    Author,
+    Publisher
 )
 
 from faker import Faker
@@ -13,7 +14,7 @@ from datetime import datetime
 _PARENT_DIR = os.path.dirname(os.path.realpath(__file__))
 _DATA_PATH = os.path.join(_PARENT_DIR, '..', 'data')
 
-fake = Faker()
+fake = Faker('pt-BR')
 
 def generate_languages():
     data = pd.read_csv(os.path.join(_DATA_PATH, 'languages.csv'), index_col=None)
@@ -45,3 +46,15 @@ def generate_authors_without_books(number_of_authors = 20):
         ))
 
     return authors
+
+def generate_publishers(number_of_publishers = 20):
+    publishers = []
+
+    for i in range(number_of_publishers):
+        publishers.append(Publisher(
+            name=fake.company(),
+            phone=''.join(char for char in fake.phone_number() if char.isdigit() or char.isspace()),
+            address=fake.address()
+        ))
+
+    return publishers

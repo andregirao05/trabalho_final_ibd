@@ -80,3 +80,23 @@ class Database:
                 cursor.close()
 
         return results
+    
+    def insert_publishers(self, publishers):
+        results = True
+        cursor = None
+
+        try:
+            data = [(pub.name, pub.phone, pub.address) for pub in publishers]
+            sql = 'INSERT INTO editora (nome, telefone, endereco) VALUES (%s, %s, %s)'
+
+            cursor = self.connection.cursor()
+            cursor.executemany(sql, data)
+            self.connection.commit()
+        except conector.Error as erro:
+            print(f'Erro ao inserir dados na tabela "autor": {erro}')
+            results = False
+        finally:
+            if cursor:
+                cursor.close()
+
+        return results
