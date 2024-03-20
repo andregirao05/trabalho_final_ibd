@@ -20,3 +20,21 @@ class Database:
     def disconnect(self):
         if self.connection.is_connected():
             self.connection.disconnect()
+
+    def insert_nacionalities(self, nacionalities) -> bool:
+        results = True
+
+        try:
+            data = [(nacionality.code, nacionality.name) for nacionality in nacionalities]
+            sql = 'INSERT INTO nacionalidade (codigo, nome) VALUES (%s, %s)'
+
+            cursor = self.connection.cursor()
+            cursor.executemany(sql, data)
+            self.connection.commit()
+        except conector.Error as erro:
+            print(f'Erro ao inserir dados na tabela "nacionalidade: "{erro}')
+            results = False
+        finally:
+            cursor.close()
+
+        return results

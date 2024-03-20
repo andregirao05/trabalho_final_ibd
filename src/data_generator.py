@@ -1,24 +1,23 @@
 import pandas as pd
 import os
+from entities import Nationality, Language
 
 _PARENT_DIR = os.path.dirname(os.path.realpath(__file__))
 _DATA_PATH = os.path.join(_PARENT_DIR, '..', 'data')
 
-def get_language_data():
-    languages = pd.read_csv(os.path.join(_DATA_PATH, 'languages.csv'), index_col=None)
-    languages = languages[['ISO 639-2 Code', 'English name of Language']]
-    
-    languages['English name of Language'] = languages['English name of Language'].apply(lambda x: x.split(';')[0])
-    
-    languages = languages.rename(columns={'ISO 639-2 Code': 'code', 'English name of Language': 'name'})
+def generate_languages():
+    data = pd.read_csv(os.path.join(_DATA_PATH, 'languages.csv'), index_col=None)
+    data = data[['ISO 639-2 Code', 'English name of Language']]
+    data['English name of Language'] = data['English name of Language'].apply(lambda x: x.split(';')[0])
+
+    languages = [Language(row['ISO 639-2 Code'], row['English name of Language']) for _, row in data.iterrows()]
 
     return languages
 
-def get_country_data():
-    countries = pd.read_csv(os.path.join(_DATA_PATH, 'countries.csv'))
-    countries = countries[['alpha-3', 'name']]
+def generate_nacionalities():
+    data = pd.read_csv(os.path.join(_DATA_PATH, 'countries.csv'), keep_default_na=False)
+    data = data[['alpha-2', 'name']]
 
-    countries = countries.rename(columns={'alpha-3': 'code'})
+    nacionalities = [Nationality(row['alpha-2'], row['name']) for _, row in data.iterrows()]
 
-    return countries
-
+    return nacionalities
