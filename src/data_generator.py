@@ -9,6 +9,7 @@ def generate_languages():
     data = pd.read_csv(os.path.join(_DATA_PATH, 'languages.csv'), index_col=None)
     data = data[['ISO 639-2 Code', 'English name of Language']]
     data['English name of Language'] = data['English name of Language'].apply(lambda x: x.split(';')[0])
+    data['ISO 639-2 Code'] = data['ISO 639-2 Code'].apply(lambda x: x.split('-')[0])
 
     languages = [Language(row['ISO 639-2 Code'], row['English name of Language']) for _, row in data.iterrows()]
 
