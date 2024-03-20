@@ -23,6 +23,7 @@ class Database:
 
     def insert_nacionalities(self, nacionalities) -> bool:
         results = True
+        cursor = None
 
         try:
             data = [(nacionality.code, nacionality.name) for nacionality in nacionalities]
@@ -35,12 +36,14 @@ class Database:
             print(f'Erro ao inserir dados na tabela "nacionalidade": {erro}')
             results = False
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
 
         return results
     
     def insert_languages(self, languages) -> bool:
         results = True
+        cursor = None
 
         try:
             data = [(language.code, language.name) for language in languages]
@@ -53,6 +56,27 @@ class Database:
             print(f'Erro ao inserir dados na tabela "idioma": {erro}')
             results = False
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
+
+        return results
+    
+    def insert_authors(self, authors):
+        results = True
+        cursor = None
+
+        try:
+            data = [(author.name, author.date_of_birth.strftime("%Y-%m-%d"), author.biographic_note, author.nationality_code) for author in authors]
+            sql = 'INSERT INTO autor (nome, data_nascimento, nota_bibliografica, codigo_nacionalidade) VALUES (%s, %s, %s, %s)'
+
+            cursor = self.connection.cursor()
+            cursor.executemany(sql, data)
+            self.connection.commit()
+        except conector.Error as erro:
+            print(f'Erro ao inserir dados na tabela "autor": {erro}')
+            results = False
+        finally:
+            if cursor:
+                cursor.close()
 
         return results

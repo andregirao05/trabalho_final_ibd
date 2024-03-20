@@ -1,9 +1,19 @@
 import pandas as pd
 import os
-from entities import Nationality, Language
+from entities import (
+    Nationality, 
+    Language,
+    Author    
+)
+
+from faker import Faker
+import random
+from datetime import datetime
 
 _PARENT_DIR = os.path.dirname(os.path.realpath(__file__))
 _DATA_PATH = os.path.join(_PARENT_DIR, '..', 'data')
+
+fake = Faker()
 
 def generate_languages():
     data = pd.read_csv(os.path.join(_DATA_PATH, 'languages.csv'), index_col=None)
@@ -22,3 +32,16 @@ def generate_nacionalities():
     nacionalities = [Nationality(row['alpha-2'], row['name']) for _, row in data.iterrows()]
 
     return nacionalities
+
+def generate_authors_without_books(number_of_authors = 20):
+    authors = []
+
+    for i in range(number_of_authors):
+        authors.append(Author(
+            name=fake.name(),
+            date_of_birth=datetime.strptime(fake.date(), "%Y-%m-%d"),
+            biographic_note=fake.sentence(),
+            nationality_code=fake.country_code()
+        ))
+
+    return authors

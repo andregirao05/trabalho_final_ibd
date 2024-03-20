@@ -7,11 +7,11 @@ class Nationality:
     name: str
 
 @dataclass
-class Autor:
+class Author:
     name: str
     date_of_birth: date
-    bibliographic_note: str
-    nationality: Nationality
+    biographic_note: str
+    nationality_code: str
     code: int = None
 
 @dataclass
