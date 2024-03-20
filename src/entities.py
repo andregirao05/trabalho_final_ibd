@@ -1,3 +1,6 @@
+"""
+Classes que guardam os dados de entidades.
+"""
 from dataclasses import dataclass
 from datetime import date
 

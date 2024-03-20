@@ -1,3 +1,7 @@
+"""
+    Funções que geram dados para preencher o banco de dados
+"""
+
 import pandas as pd
 import os
 from entities import (
@@ -17,6 +21,14 @@ _DATA_PATH = os.path.join(_PARENT_DIR, '..', 'data')
 fake = Faker('pt-BR')
 
 def generate_languages():
+    """
+        Função gera uma lista de objetos da classe Language usando dados do mundo real
+        disponíveis em https://github.com/andregirao05/trabalho_final_ibd/blob/main/data/languages.csv.
+
+        Os dados incluem: 
+            - código do idioma no padrão ISO 639-2;
+            - nome do idioma (em inglês).
+    """
     data = pd.read_csv(os.path.join(_DATA_PATH, 'languages.csv'), index_col=None)
     data = data[['ISO 639-2 Code', 'English name of Language']]
     data['English name of Language'] = data['English name of Language'].apply(lambda x: x.split(';')[0])
@@ -27,6 +39,14 @@ def generate_languages():
     return languages
 
 def generate_nacionalities():
+    """
+        Cria uma lista de objetos da classe Nacionality com dados do mundo real
+        disponíveis em https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv
+
+        Os dados incluem:
+            - código do país no padrão ISO 3116-2
+            - nome do país (em inglês)
+    """
     data = pd.read_csv(os.path.join(_DATA_PATH, 'countries.csv'), keep_default_na=False)
     data = data[['alpha-2', 'name']]
 
@@ -35,6 +55,9 @@ def generate_nacionalities():
     return nacionalities
 
 def generate_authors_without_books(number_of_authors = 20):
+    """
+        Gera uma lista de objetos da classe Author de tamanho especificado com dados aleatórios.
+    """
     authors = []
 
     for i in range(number_of_authors):
@@ -48,12 +71,15 @@ def generate_authors_without_books(number_of_authors = 20):
     return authors
 
 def generate_publishers(number_of_publishers = 20):
+    """
+        Gera uma lista de objetos da classe Publisher de tamanho especificado com dados aleatórios.
+    """
     publishers = []
 
     for i in range(number_of_publishers):
         publishers.append(Publisher(
             name=fake.company(),
-            phone=''.join(char for char in fake.phone_number() if char.isdigit() or char.isspace()),
+            phone=''.join(char for char in fake.phone_number() if char.isdigit() or char.isspace()), #número de telefone, apenas digitos e espaços brancos entre códigos
             address=fake.address()
         ))
 

@@ -6,6 +6,7 @@ load_dotenv()
 
 
 class Database:
+    """ Classe que conecta ao banco de dados e executa manipulções """
     def __init__(self):
         self.connect()
 
