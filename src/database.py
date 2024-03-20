@@ -32,7 +32,25 @@ class Database:
             cursor.executemany(sql, data)
             self.connection.commit()
         except conector.Error as erro:
-            print(f'Erro ao inserir dados na tabela "nacionalidade: "{erro}')
+            print(f'Erro ao inserir dados na tabela "nacionalidade": {erro}')
+            results = False
+        finally:
+            cursor.close()
+
+        return results
+    
+    def insert_languages(self, languages) -> bool:
+        results = True
+
+        try:
+            data = [(language.code, language.name) for language in languages]
+            sql = 'INSERT INTO idioma (codigo, nome) VALUES (%s, %s)'
+
+            cursor = self.connection.cursor()
+            cursor.executemany(sql, data)
+            self.connection.commit()
+        except conector.Error as erro:
+            print(f'Erro ao inserir dados na tabela "idioma": {erro}')
             results = False
         finally:
             cursor.close()

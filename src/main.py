@@ -7,4 +7,6 @@ if __name__ == '__main__':
     nacionalities = generate_nacionalities()
     db.insert_nacionalities(nacionalities)
 
+    languages = generate_languages()
+    db.insert_languages(languages)
     
