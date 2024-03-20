@@ -16,7 +16,7 @@ if __name__ == '__main__':
     db.insert_languages(languages)
 
     authors_withour_books = generate_authors_without_books()
-    db.insert_authors(authors_withour_books) 
+    author_codes = db.insert_authors(authors_withour_books) 
 
     publishers = generate_publishers()
-    db.insert_publishers(publishers)
+    publisher_codes = db.insert_publishers(publishers)
