@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import mysql.connector as conector
 
-from entities import Book
+from entities import Book, Publisher
 
 load_dotenv()
 
@@ -158,3 +158,56 @@ class Database:
 
         return inserted
     
+    def insert_editions(self, editions):
+        inserted = False
+
+        try:
+            sql = 'INSERT INTO edicao (isbn, ano, numero_paginas, valor, quantidade_estoque, codigo_livro, codigo_editora) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+
+            with self.connection.cursor() as cursor:
+                data = [(ed.isbn, ed.year, ed.num_pages, ed.price, ed.stock_quantity, ed.book_code, ed.publisher_code) for ed in editions]
+                cursor.executemany(sql, data)
+            
+            self.connection.commit()
+            inserted = True
+        except Exception as error:
+            print(f'Erro ao inserir dados na tabela "edicao": {error}')
+
+        return inserted
+    
+    def get_random_book_codes(self):
+        book_codes = []
+
+        try: 
+            with self.connection.cursor() as cursor:
+                # inserir livro
+                query = "SELECT codigo FROM livro ORDER BY RAND() limit 500"    
+                cursor.execute(query)
+
+                res = cursor.fetchall()
+                book_codes = [data[0] for data in res]
+
+            self.connection.commit()
+        except Exception as error:
+            print(f'Erro ao recuperar dados dos livros": {error}')
+
+        return book_codes
+    
+    def get_random_publisher_codes(self):
+        publisher_codes = []
+
+        try: 
+            with self.connection.cursor() as cursor:
+                # inserir livro
+                query = 'SELECT codigo FROM editora ORDER BY RAND() LIMIT 30'    
+                
+                cursor.execute(query)
+
+                res = cursor.fetchall()
+                publisher_codes = [data[0] for data in res]
+
+            self.connection.commit()
+        except Exception as error:
+            print(f'Erro ao recuperar dados das editoras": {error}')
+
+        return publisher_codes

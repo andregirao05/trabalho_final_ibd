@@ -104,7 +104,7 @@ def generate_books(author_code, number_of_books = 20):
     
     return books
 
-def generate_editions(publisher_code, number_of_editions = 20):
+def generate_editions(publisher_code, number_of_editions = 20, book_code = None):
     """
         Gera uma lista de objetos da classe Edition de tamanho especificado com dados aleatórios.
     """
@@ -117,7 +117,8 @@ def generate_editions(publisher_code, number_of_editions = 20):
             year=fake.year(), 
             stock_quantity=random.randint(1, 10001),
             num_pages=random.randint(30, 1500),
-            publisher_code=publisher_code
+            publisher_code=publisher_code,
+            book_code=book_code
          ))
     
     return books

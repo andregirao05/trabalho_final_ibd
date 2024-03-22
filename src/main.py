@@ -12,7 +12,7 @@ from data_generator import (
     generate_editions
 )
 
-from random import shuffle, randint
+from random import choice, randint
 
 def useCase1(db):
     """
@@ -73,11 +73,16 @@ def useCase5(db):
 
 def useCase6(db):
     """
-        A livraria comprou várias edições de um livro de um autor já cadastrado, porém as edições 
-        podem ser de editoras diferentes ou ainda não disponíveis no banco. Os dados das editoras 
-        são passados também.
+        A livraria comprou de diferentes editoras várias edições de um livro de um autor já cadastrado.
     """
-    pass
+    random_publisher_codes = db.get_random_publisher_codes()
+    random_books_codes = db.get_random_book_codes()
+
+    for book_code in random_books_codes:
+        publiser_code = choice(random_publisher_codes)
+        new_editions = generate_editions(publisher_code=publiser_code, number_of_editions=randint(1, 5), book_code=book_code)
+        db.insert_editions(new_editions)
+        
 
 if __name__ == '__main__':
     db = Database()
@@ -91,3 +96,5 @@ if __name__ == '__main__':
     useCase4(db)
 
     useCase5(db)
+
+    useCase6(db)
