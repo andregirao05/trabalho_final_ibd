@@ -55,3 +55,23 @@ CREATE TABLE edicao (
     FOREIGN KEY (codigo_livro) REFERENCES livro (codigo),
     FOREIGN KEY (codigo_editora) REFERENCES editora (codigo)
 );
+
+CREATE VIEW livros_com_mais_estoque AS
+SELECT
+	top_livros.titulo AS titulo_livro,
+    editora.nome AS nome_editora,
+    edicao.isbn AS codigo_ISBN,
+    top_livros.total_estoque
+FROM (
+		SELECT 
+			livro.codigo AS codigo_livro,
+			livro.titulo,
+			SUM(edicao.quantidade_estoque) AS total_estoque
+		FROM edicao
+		JOIN livro ON edicao.codigo_livro = livro.codigo
+		GROUP BY livro.codigo, livro.titulo
+		ORDER BY total_estoque DESC
+        LIMIT 10
+	) AS top_livros
+JOIN edicao ON edicao.codigo_livro = top_livros.codigo_livro
+JOIN editora ON edicao.codigo_editora = editora.codigo;
