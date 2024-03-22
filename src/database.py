@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 import mysql.connector as conector
 
+from entities import Book
+
 load_dotenv()
 
 
@@ -22,7 +24,7 @@ class Database:
         if self.connection.is_connected():
             self.connection.disconnect()
 
-    def insert_nacionalities(self, nacionalities) -> bool:
+    def insert_all_nacionalities(self, nacionalities) -> bool:
         results = True
 
         try:
@@ -39,7 +41,7 @@ class Database:
         
         return results
     
-    def insert_languages(self, languages) -> bool:
+    def insert_all_languages(self, languages) -> bool:
         results = True
 
         try:
@@ -56,40 +58,103 @@ class Database:
 
         return results
     
-    def insert_authors(self, authors):
-        inserted_ids = []
+    def insert_all_authors(self, authors):
+        inserted = False
 
         try:
             sql = 'INSERT INTO autor (nome, data_nascimento, nota_bibliografica, codigo_nacionalidade) VALUES (%s, %s, %s, %s)'
             
             with self.connection.cursor() as cursor:
-                for author in authors:
-                    data = (author.name, author.date_of_birth.strftime("%Y-%m-%d"), author.biographic_note, author.nationality_code)
-                    cursor.execute(sql, data)
-                    inserted_ids.append(cursor.lastrowid)
+                data = [(author.name, author.date_of_birth.strftime("%Y-%m-%d"), author.biographic_note, author.nationality_code) for author in authors]
+                cursor.executemany(sql, data)
+
+            self.connection.commit()
+            inserted = True
+        except Exception as error:
+            print(f'Erro ao inserir dados na tabela "autor": {error}')
+        
+        return inserted
+    
+    def insert_author(self, author):
+        inserted_id = None
+
+        try:
+            sql = 'INSERT INTO autor (nome, data_nascimento, nota_bibliografica, codigo_nacionalidade) VALUES (%s, %s, %s, %s)'
+            
+            with self.connection.cursor() as cursor:               
+                data = (author.name, author.date_of_birth.strftime("%Y-%m-%d"), author.biographic_note, author.nationality_code)
+                cursor.execute(sql, data)
+                inserted_id = cursor.lastrowid
             
             self.connection.commit()
         except Exception as error:
             print(f'Erro ao inserir dados na tabela "autor": {error}')
-            inserted_ids.clear()
         
-        return inserted_ids
+        return inserted_id
     
-    def insert_publishers(self, publishers):
-        inserted_ids = []
+    def insert_all_publishers(self, publishers):
+        inserted = False
 
         try:
             sql = 'INSERT INTO editora (nome, telefone, endereco) VALUES (%s, %s, %s)'
             
             with self.connection.cursor() as cursor:
-                for pub in publishers:
-                    data = (pub.name, pub.phone, pub.address)
-                    cursor.execute(sql, data)
-                    inserted_ids.append(cursor.lastrowid)
+                data = [(pub.name, pub.phone, pub.address) for pub in publishers]
+                cursor.executemany(sql, data)
             
             self.connection.commit()
+            inserted = True
         except Exception as error:
-            print(f'Erro ao inserir dados na tabela "autor": {error}')
-            inserted_ids.clear()
+            print(f'Erro ao inserir dados na tabela "editora": {error}')
 
-        return inserted_ids
+        return inserted
+    
+    def insert_publisher(self, publisher):
+        inserted_id = None
+
+        try:
+            sql = 'INSERT INTO editora (nome, telefone, endereco) VALUES (%s, %s, %s)'
+            
+            with self.connection.cursor() as cursor:
+                data = (publisher.name, publisher.phone, publisher.address)
+                cursor.execute(sql, data)
+                inserted_id = cursor.lastrowid
+
+            self.connection.commit()
+        except Exception as error:
+            print(f'Erro ao inserir dados na tabela "editora": {error}')
+
+        return inserted_id
+    
+    def insert_book_and_editions(self, book, editions):
+        inserted = False
+
+        try: 
+            with self.connection.cursor() as cursor:
+                # inserir livro
+                insert_book_sql = 'INSERT INTO livro (titulo, ano, codigo_idioma) VALUES (%s, %s, %s)'
+                book_data = (book.title, book.year, book.language_code)
+                cursor.execute(insert_book_sql, book_data)
+                book.code = cursor.lastrowid
+
+                # inserir relacionamento escreve
+                insert_write_sql = 'INSERT INTO escreve (codigo_autor, codigo_livro) VALUES (%s, %s)'
+                write_data = (book.author_code, book.code)
+                cursor.execute(insert_write_sql, write_data)
+
+                # inserir edições
+                insert_edition_sql = 'INSERT INTO edicao (isbn, ano, numero_paginas, valor, quantidade_estoque, codigo_livro, codigo_editora) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+
+                for edition in editions:
+                    edition.book_code = book.code
+                    edition_data = (edition.isbn, edition.year, edition.num_pages, edition.price, edition.stock_quantity, edition.book_code, edition.publisher_code)
+                    cursor.execute(insert_edition_sql, edition_data)
+                    edition.code = cursor.lastrowid
+
+            self.connection.commit()
+            inserted = True
+        except Exception as error:
+            print(f'Erro ao inserir dados de livros e edições": {error}')
+
+        return inserted
+    

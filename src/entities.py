@@ -33,15 +33,16 @@ class Language:
 class Edition:
     isbn: str
     price: float
-    year: int
+    year: str
     stock_quantity: int
     num_pages: int
-    publisher: Publisher
+    publisher_code: int = None
+    book_code: int = None
 
 @dataclass
 class Book:
     title: str
-    year: int 
-    language: Language
-    editions: list[Edition]
+    year: str 
+    language_code: str
     code: int = None
+    author_code: int = None

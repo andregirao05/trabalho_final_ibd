@@ -8,7 +8,9 @@ from entities import (
     Nationality, 
     Language,
     Author,
-    Publisher
+    Publisher,
+    Book,
+    Edition
 )
 
 from faker import Faker
@@ -54,7 +56,7 @@ def generate_nacionalities():
 
     return nacionalities
 
-def generate_authors_without_books(number_of_authors = 20):
+def generate_authors(number_of_authors = 20):
     """
         Gera uma lista de objetos da classe Author de tamanho especificado com dados aleatórios.
     """
@@ -84,3 +86,38 @@ def generate_publishers(number_of_publishers = 20):
         ))
 
     return publishers
+
+def generate_books(author_code, number_of_books = 20):
+    """
+        Gera uma lista de objetos da classe Book de tamanho especificado com dados aleatórios.
+    """
+    language_code = random.choice(generate_languages()).code
+
+    books = []
+    for i in range(number_of_books):
+        books.append(Book(
+            title=fake.catch_phrase(),
+            year=fake.year(),
+            language_code=language_code,
+            author_code=author_code
+         ))
+    
+    return books
+
+def generate_editions(publisher_code, number_of_editions = 20):
+    """
+        Gera uma lista de objetos da classe Edition de tamanho especificado com dados aleatórios.
+    """
+
+    books = []
+    for i in range(number_of_editions):
+        books.append(Edition(
+            isbn=fake.isbn13().replace('-', ''),
+            price=random.randint(50, 330),
+            year=fake.year(), 
+            stock_quantity=random.randint(1, 10001),
+            num_pages=random.randint(30, 1500),
+            publisher_code=publisher_code
+         ))
+    
+    return books
