@@ -13,6 +13,7 @@ class Database:
         self.connect()
 
     def connect(self):
+        """ Cria conexão com banco """
         self.connection = conector.connect(
             host=os.getenv("DB_HOST"),
             user=os.getenv("DB_USER"),
@@ -21,10 +22,12 @@ class Database:
         )
 
     def disconnect(self):
+        """ Desconecta o banco """
         if self.connection.is_connected():
             self.connection.disconnect()
 
     def insert_all_nacionalities(self, nacionalities) -> bool:
+        """ Insere uma lista de nacionalidades no banco de dados """
         results = True
 
         try:
@@ -42,6 +45,7 @@ class Database:
         return results
     
     def insert_all_languages(self, languages) -> bool:
+        """ Insere uma lista de idiomas no banco de dados """
         results = True
 
         try:
@@ -59,6 +63,7 @@ class Database:
         return results
     
     def insert_all_authors(self, authors):
+        """ insere uma lista de autores no banco de dados """
         inserted = False
 
         try:
@@ -76,6 +81,7 @@ class Database:
         return inserted
     
     def insert_author(self, author):
+        """ Insere um único autor no banco de dados """
         inserted_id = None
 
         try:
@@ -93,6 +99,7 @@ class Database:
         return inserted_id
     
     def insert_all_publishers(self, publishers):
+        """ Insere uma lista de editoras no banco de dados """
         inserted = False
 
         try:
@@ -110,6 +117,7 @@ class Database:
         return inserted
     
     def insert_publisher(self, publisher):
+        """ Insere uma única editora no banco dados """
         inserted_id = None
 
         try:
@@ -127,6 +135,7 @@ class Database:
         return inserted_id
     
     def insert_book_and_editions(self, book, editions):
+        """ Insere um livro e suas edições no banco de dados """
         inserted = False
 
         try: 
@@ -159,6 +168,7 @@ class Database:
         return inserted
     
     def insert_editions(self, editions):
+        """ Insere uma lista de edições no banco de dados """
         inserted = False
 
         try:
@@ -176,6 +186,7 @@ class Database:
         return inserted
     
     def get_random_book_codes(self):
+        """ Recupera uma lista aleatória de de códigos de livros cadastrados no banco """
         book_codes = []
 
         try: 
@@ -194,6 +205,7 @@ class Database:
         return book_codes
     
     def get_random_publisher_codes(self):
+        """ Recupera uma lista aleatória de de códigos de editoras cadastradas no banco """
         publisher_codes = []
 
         try: 
