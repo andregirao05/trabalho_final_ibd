@@ -47,8 +47,8 @@ def insert_publishers_without_editions_use_case(db: Database):
 
 def insert_pulishers_authors_books_and_editions_use_case(db: Database):
     """
-        A livraria fechou contrato com uma editora já cadastrada e recebeu toda a obras de 
-        diversos autores. Alguns autores podem já estarem cadastrados.
+        A livraria fechou contrato com uma editoras novase recebeu toda a obras de 
+        diversos autores novos.
     """
     publishers = generate_publishers(number_of_publishers=50)
 
@@ -68,7 +68,8 @@ def insert_pulishers_authors_books_and_editions_use_case(db: Database):
 
 def insert_only_editions_use_case(db: Database):
     """
-        A livraria comprou de diferentes editoras várias edições de um livro de um autor já cadastrado.
+        A livraria comprou de diferentes editoras várias edições de um livro já registrado 
+        de um autor já cadastrado.
     """
     random_publisher_codes = db.get_random_publisher_codes()
     random_books_codes = db.get_random_book_codes()
