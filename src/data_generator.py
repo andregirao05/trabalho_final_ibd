@@ -25,7 +25,7 @@ fake = Faker('pt-BR')
 def generate_languages():
     """
         Função gera uma lista de objetos da classe Language usando dados do mundo real
-        disponíveis em https://github.com/andregirao05/trabalho_final_ibd/blob/main/data/languages.csv.
+        disponíveis em https://www.cia.gov/the-world-factbook/references/language-data-codes/.
 
         Os dados incluem: 
             - código do idioma no padrão ISO 639-2;
