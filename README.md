@@ -11,13 +11,15 @@ pip install -r requirements.txt
 
 Os scripts necessitam de algumas variáveis de ambiente. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 ```
-DB_HOST=<ip do host>
+DB_HOST="<ip do host>"
 DB_NAME=<nome do banco de dados>
 DB_USER=<usuario do banco de dados>
 DB_PASSWORD=<senha do usuario>
 ```
 
 ## Execução dos scripts
+
+Certifique-se que o banco de dados está ativo e com as tabelas já criadas (o script de criação do banco de dados `MYSQL` escontra-se em `sql_scripts/create_database.sql`).
 
 Para ver o projeto em funcionamento, execute o arquivo principal:
 ```
