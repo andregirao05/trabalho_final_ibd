@@ -54,3 +54,11 @@ JOIN editora
 	ON editora.codigo = edicao.codigo_editora
 WHERE autor.nome LIKE "%Enrico%";
 	
+-- d) (UPDATE) Atualizar a quantidade de estoque de todas as edições de livros
+-- de uma editora dada como entrada - aumentando em 20%.
+UPDATE edicao
+SET quantidade_estoque = quantidade_estoque * 1.2
+WHERE codigo_editora = 51;
+
+-- e) (INSERT) Inserir uma nova edição de um livro que já existe, considerando
+-- que essa edição continua associada à editora anterior.
