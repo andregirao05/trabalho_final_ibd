@@ -25,3 +25,7 @@ Para ver o projeto em funcionamento, execute o arquivo principal:
 ```
 python src/main.py
 ```
+
+## (OPICIONAL) Carregar todos os dados (DUMP do banco de dados)
+
+Todos os dados do banco de dados que foram utilizados neste trabalho estão em `sql_scripts/dump_database.sql`.
