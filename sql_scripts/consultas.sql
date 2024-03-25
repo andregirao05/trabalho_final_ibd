@@ -62,3 +62,5 @@ WHERE codigo_editora = 51;
 
 -- e) (INSERT) Inserir uma nova edição de um livro que já existe, considerando
 -- que essa edição continua associada à editora anterior.
+INSERT INTO edicao (isbn, ano, numero_paginas, valor, quantidade_estoque, codigo_livro, codigo_editora)
+VALUES ('9780732155278', 1978, 678, 267.99, 360, 503, 37);
