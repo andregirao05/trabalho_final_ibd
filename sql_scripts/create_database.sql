@@ -58,14 +58,27 @@ CREATE TABLE edicao (
 
 CREATE VIEW livros_com_mais_estoque AS
 SELECT
+	edicao.isbn AS codigo_ISBN_edicao,
+    top_livros.codigo_livro AS codigo_livro,
 	top_livros.titulo AS titulo_livro,
+    top_livros.ano AS ano_lancamento_livro,
+    idioma.nome AS idioma,
+    top_livros.codigo_idioma AS codigo_idioma,
+    autor.nome AS nome_autor,
+    autor.codigo AS codigo_autor,
     editora.nome AS nome_editora,
-    edicao.isbn AS codigo_ISBN,
-    top_livros.total_estoque
+    editora.codigo AS codigo_editora,
+    edicao.ano AS ano_lancamento_edicao,
+    edicao.numero_paginas AS numero_paginas_edicao,
+    edicao.valor AS valor_edicao,
+    edicao.quantidade_estoque AS quantidade_estoque_edicao,
+    top_livros.total_estoque AS total_estoque_livro
 FROM (
 		SELECT 
 			livro.codigo AS codigo_livro,
 			livro.titulo,
+            livro.ano,
+            livro.codigo_idioma,
 			SUM(edicao.quantidade_estoque) AS total_estoque
 		FROM edicao
 		JOIN livro ON edicao.codigo_livro = livro.codigo
@@ -74,4 +87,7 @@ FROM (
         LIMIT 10
 	) AS top_livros
 JOIN edicao ON edicao.codigo_livro = top_livros.codigo_livro
-JOIN editora ON edicao.codigo_editora = editora.codigo;
+JOIN editora ON edicao.codigo_editora = editora.codigo
+JOIN idioma ON top_livros.codigo_idioma = idioma.codigo
+JOIN escreve ON escreve.codigo_livro = top_livros.codigo_livro
+JOIN autor ON escreve.codigo_autor = autor.codigo;
