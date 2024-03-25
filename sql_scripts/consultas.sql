@@ -35,3 +35,22 @@ JOIN edicao
 JOIN editora
 	ON editora.codigo = edicao.codigo_editora
 WHERE livro.titulo LIKE "%poder%";
+
+-- c) (SELECT) Dada uma string “XXX” dada como entrada, listar as informações
+-- das edições (id das edições, editoras, títulos dos livros) onde a string
+-- fornecida esteja presente no nome de pelo menos um dos autores dos livros.
+SELECT DISTINCT
+	edicao.isbn AS isbn_edicao,
+    editora.nome AS editora,
+    livro.titulo AS titulo_livro
+FROM livro 
+JOIN escreve
+	ON escreve.codigo_livro = livro.codigo
+JOIN autor 
+	ON autor.codigo = escreve.codigo_autor
+JOIN edicao
+	ON edicao.codigo_livro = livro.codigo
+JOIN editora
+	ON editora.codigo = edicao.codigo_editora
+WHERE autor.nome LIKE "%Enrico%";
+	
