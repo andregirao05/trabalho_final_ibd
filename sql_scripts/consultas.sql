@@ -34,7 +34,7 @@ JOIN edicao
 	ON edicao.codigo_livro = livro.codigo
 JOIN editora
 	ON editora.codigo = edicao.codigo_editora
-WHERE livro.titulo LIKE "%poder%";
+WHERE MATCH (livro.titulo) AGAINST ("poder");
 
 -- c) (SELECT) Dada uma string “XXX” dada como entrada, listar as informações
 -- das edições (id das edições, editoras, títulos dos livros) onde a string
@@ -42,7 +42,8 @@ WHERE livro.titulo LIKE "%poder%";
 SELECT DISTINCT
 	edicao.isbn AS isbn_edicao,
     editora.nome AS editora,
-    livro.titulo AS titulo_livro
+    livro.titulo AS titulo_livro,
+    autor.nome AS nome_autor
 FROM livro 
 JOIN escreve
 	ON escreve.codigo_livro = livro.codigo
@@ -52,7 +53,7 @@ JOIN edicao
 	ON edicao.codigo_livro = livro.codigo
 JOIN editora
 	ON editora.codigo = edicao.codigo_editora
-WHERE autor.nome LIKE "%Enrico%";
+WHERE MATCH (autor.nome) AGAINST ("André");
 	
 -- d) (UPDATE) Atualizar a quantidade de estoque de todas as edições de livros
 -- de uma editora dada como entrada - aumentando em 20%.

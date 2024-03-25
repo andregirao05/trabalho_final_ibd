@@ -13,7 +13,8 @@ CREATE TABLE autor (
     data_nascimento DATE NOT NULL, 
     nota_bibliografica TEXT, 
     codigo_nacionalidade CHAR(2) NOT NULL,
-    FOREIGN KEY (codigo_nacionalidade) REFERENCES nacionalidade (codigo)
+    FOREIGN KEY (codigo_nacionalidade) REFERENCES nacionalidade (codigo),
+    FULLTEXT KEY (nome)
 );
 
 CREATE TABLE editora (
@@ -33,7 +34,8 @@ CREATE TABLE livro (
     titulo VARCHAR(255) NOT NULL,
     ano YEAR,
     codigo_idioma CHAR(3) NOT NULL,
-    FOREIGN KEY (codigo_idioma) REFERENCES idioma (codigo)
+    FOREIGN KEY (codigo_idioma) REFERENCES idioma (codigo),
+    FULLTEXT KEY (titulo)
 );
 
 CREATE TABLE escreve (
